@@ -3,8 +3,9 @@ const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
 const path = require('path');
+const authController = require('./controllers/authController');
 const chatRoutes = require('./routes/chatRoutes');
-const authRoutes = require('./routes/authRoutes');
+// const authRoutes = require('./routes/authRoutes');
 const setupChatSockets = require('./sockets/chatSockets');
 
 require('dotenv').config();
@@ -25,8 +26,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.post('/api/auth/register', authController.register);
+app.post('/api/auth/login', authController.login);
+
 app.use('/api', chatRoutes);
-app.use('/api', authRoutes);
+// app.use('/api', authRoutes);
 
 app.use(express.static(path.join(__dirname, 'dist/chat-app')));
 app.get('*', (req, res) => {
