@@ -8,11 +8,6 @@ const setupChatSockets = require('./sockets/chatSockets');
 
 require('dotenv').config();
 
-app.use(express.static(path.join(__dirname, 'dist/chat-app')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/chat-app', 'index.html'));
-});
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -31,6 +26,11 @@ app.use(express.json());
 
 app.use('/api', chatRoutes);
 app.use('/api', authRoutes);
+
+app.use(express.static(path.join(__dirname, 'dist/chat-app')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/chat-app', 'index.html'));
+});
 
 setupChatSockets(io);
 
